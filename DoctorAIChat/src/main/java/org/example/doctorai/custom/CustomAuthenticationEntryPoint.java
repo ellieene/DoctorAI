@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Кастомная аутентификация
+ */
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override

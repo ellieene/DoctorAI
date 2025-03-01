@@ -1,12 +1,14 @@
 package org.example.doctorai.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.example.doctorai.model.enums.Role;
-import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 import java.util.*;
 
@@ -20,16 +22,16 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    public UUID id;
+    private UUID id;
 
     @Column(name = "login", nullable = false, unique = true)
-    public String login;
+    private String login;
 
     @Column(name = "password", nullable = false)
-    public String password;
+    private String password;
 
     @Column(name = "email", nullable = false)
-    public String email;
+    private String email;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -37,7 +39,10 @@ public class User implements UserDetails {
     @Column
     private boolean letter;
 
-//    @Column(name = "chats_id")
+    @Column
+    private boolean notification;
+
+    //    @Column(name = "chats_id")
     @ManyToMany
     @JoinTable(
             name = "user_chat",

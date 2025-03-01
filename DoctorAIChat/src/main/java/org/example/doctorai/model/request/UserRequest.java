@@ -31,4 +31,7 @@ public class UserRequest {
 
     @Schema(description = "letter", example = "true")
     private boolean letter;
+
+    @Schema(description = "notification", example = "true")
+    private boolean notification;
 }

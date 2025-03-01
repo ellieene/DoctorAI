@@ -1,5 +1,6 @@
 package org.example.doctorai.service;
 
+import lombok.SneakyThrows;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.doctorai.model.dto.CustomUserDetails;
@@ -23,13 +24,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     /**
      * Загрузка нового локального пользователя
      *
-     * @param email
+     * @param email почта пользователя
      * @return {@link UserDetails}
-     * @throws UsernameNotFoundException
      */
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    @SneakyThrows
+    public UserDetails loadUserByUsername(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 

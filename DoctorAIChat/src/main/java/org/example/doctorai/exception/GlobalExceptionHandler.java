@@ -39,6 +39,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GigaChataException.class)
     public String handleException(GigaChataException e) {return e.getMessage();}
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(TokenValidException.class)
+    public String handleException(TokenValidException e) {return e.getMessage();}
+
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // ⬅ Теперь 401 вместо 403
     @ExceptionHandler(InvalidJwtTokenException.class)
     public Map<String, String> handleInvalidJwtTokenException(InvalidJwtTokenException e) {

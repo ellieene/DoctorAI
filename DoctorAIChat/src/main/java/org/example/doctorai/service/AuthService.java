@@ -39,6 +39,8 @@ public class AuthService {
         UserRequest userRequest = jwtService.getEmailAndPassword(token);
         if (userRepository.existsByEmail(userRequest.getEmail())) {
             throw new DuplicateEmailException("Email уже занят.");
+        } else if (userRepository.existsByLogin(userRequest.getLogin())) {
+            throw new DuplicateEmailException("Логин уже занят.");
         }
         User user = User.builder()
                 .email(userRequest.getEmail())
@@ -46,6 +48,7 @@ public class AuthService {
                 .login(userRequest.getLogin())
                 .role(Role.ROLE_USER)
                 .letter(userRequest.isLetter())
+                .notification(userRequest.isNotification())
                 .build();
 
         userRepository.save(user);

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Репозиторий для работы с сущностью {@link Chat}
+ */
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, UUID> {
     List<Chat> findAllByUserIdAndDoctor(UUID userId, Doctor doctor);

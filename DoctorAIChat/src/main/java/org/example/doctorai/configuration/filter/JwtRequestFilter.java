@@ -21,8 +21,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtService jwtService;
-    private final static String HEADER_NAME = "Authorization";
-    private final static String HEADER_PREFIX = "Bearer ";
+    private static final String HEADER_NAME = "Authorization";
+    private static final String HEADER_PREFIX = "Bearer ";
 
     /**
      * Метод для парсинга токена авторизации при запросе

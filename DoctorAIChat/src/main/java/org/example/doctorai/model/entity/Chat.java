@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.example.doctorai.model.enums.Doctor;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
