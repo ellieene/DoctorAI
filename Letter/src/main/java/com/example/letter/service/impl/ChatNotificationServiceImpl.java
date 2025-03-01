@@ -30,10 +30,10 @@ public class ChatNotificationServiceImpl implements ChatNotificationService {
         try {
 
             Message message = mailSettingServiceImpl
-                    .createMessage("Новое открытие!", session, chatUserResponse.getUser().getEmail());
+                    .createMessage("Запись", session, chatUserResponse.getUser().getEmail());
             message.setContent(htmlContent(
-                    chatUserResponse.getCreateDoctor(),
-                    chatUserResponse.getUser().getEmail()
+                    chatUserResponse.getDoctor(),
+                    chatUserResponse.getUser().getLogin()
             ), "text/html; charset=UTF-8");
 
             Transport.send(message);
