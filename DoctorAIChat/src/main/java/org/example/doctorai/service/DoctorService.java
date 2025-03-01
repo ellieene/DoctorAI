@@ -48,7 +48,11 @@ public class DoctorService {
         chat.setUser(userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден")));
         chatRepository.save(chat);
-        sendKafka(doctor, chat.getUser());
+
+        if (chat.getUser().isNotification()) {
+            sendKafka(doctor, chat.getUser());
+
+        }
         return chat.getChatId();
     }
 
@@ -79,7 +83,6 @@ public class DoctorService {
                 .add(gigaChatClient.requestDoctor(chat, customUserDetailsService.getCurrentUser().getId().toString()));
         chatRepository.save(chat);
         return chat.getMessages().getLast();
-//        return chat.getMessages().get(chat.getMessages().size() - 1);
     }
 
     /**
