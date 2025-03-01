@@ -1,0 +1,94 @@
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,PLAINTEXT://0.0.0.0:9092  # Указываем два слушателя: INSIDE и PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://doctorai-kafka-1:9092  # Рекламируем PLAINTEXT для внешних клиентов
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,PLAINTEXT:PLAINTEXT  # Указываем безопасность для каждого слушателя
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+      KAFKA_LISTENER_NAME_INSIDE: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_INTERCEPTOR_CLASSES: org.apache.kafka.server.auth.SecurityInterceptor
+    depends_on:
+      - zookeeper
+      
+  db-chat:
+    image: postgres:14
+    container_name: postgres-chat
+    restart: always
+    environment:
+      POSTGRES_USER: ellieene
+      POSTGRES_PASSWORD: ellieene
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_chat_data:/var/lib/postgresql/data  # Уникальный volume
+
+  db-news:
+    image: postgres:14
+    container_name: postgres-news
+    restart: always
+    environment:
+      POSTGRES_USER: ellieene
+      POSTGRES_PASSWORD: ellieene
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"  # Должно быть 5433:5432, а не 5433:5433
+    volumes:
+      - postgres_news_data:/var/lib/postgresql/data  # Уникальный volume
+
+  chat:
+    build:
+      context: ./DoctorAIChat
+    container_name: Chat
+    depends_on:
+      - db-chat
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-chat:5432/postgres
+      SPRING_DATASOURCE_USERNAME: ellieene
+      SPRING_DATASOURCE_PASSWORD: ellieene
+    ports:
+      - "8081:8081"
+
+  news:
+    build:
+      context: ./DoctorAiNews
+    container_name: News
+    depends_on:
+      - db-news
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: doctorai-kafka-1:9092
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-news:5432/postgres
+      SPRING_DATASOURCE_USERNAME: ellieene
+      SPRING_DATASOURCE_PASSWORD: ellieene
+    ports:
+      - "8000:8000"
+
+  gigachat:
+    build:
+      context: ./GigaChat
+    container_name: GigaChat
+    ports:
+      - "8082:8082"
+
+  letter:
+    build:
+      context: ./NewsLetter
+    container_name: Letter
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: doctorai-kafka-1:9092
+    ports:
+      - "8002:8002"
+
+volumes:
+  postgres_chat_data:
+  postgres_news_data:

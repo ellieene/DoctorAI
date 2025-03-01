@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven 3.9.9
+Built-By: ellieene
+Build-Jdk: 21.0.5
+Implementation-Title: DoctorAiNews
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: com.example
+Implementation-URL: 
+Main-Class: com.example.doctorai.DoctorAiNewsApplication
+
