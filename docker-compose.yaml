@@ -53,6 +53,7 @@ services:
     depends_on:
       - db-chat
     environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: doctorai-kafka-1:9092
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-chat:5432/postgres
       SPRING_DATASOURCE_USERNAME: ellieene
       SPRING_DATASOURCE_PASSWORD: ellieene
@@ -82,7 +83,7 @@ services:
 
   letter:
     build:
-      context: ./NewsLetter
+      context: ./Letter
     container_name: Letter
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: doctorai-kafka-1:9092

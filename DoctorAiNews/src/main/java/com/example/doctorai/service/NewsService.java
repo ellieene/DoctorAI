@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +25,10 @@ public class NewsService {
     private final GigaChatClient gigaChatClient;
     private final LetterService letterService;
 
+    /**
+     * Вывод всех новостей
+     * @return List {@link News}
+     */
     @Transactional
     public List<News> getNews(){
         return newsRepository.findAll();
@@ -49,6 +51,7 @@ public class NewsService {
 
             String a = cleanJson(message.getContent());
 
+
             JSONObject jsonObject = new JSONObject(a);
 
             News news = News
@@ -69,18 +72,22 @@ public class NewsService {
 
     /**
      * Удаление не нужных символов с сообщения
-     * @param input
-     * @return
+     * @param input сообщение из GigaChat
+     * @return json
      */
     private String cleanJson(String input) {
-        String regex = "^```json\\n(.*?)\\n```$";
-        Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(input);
-
-        if (matcher.matches()) {
-            return matcher.group(1);
+        if (input == null || input.isEmpty()) {
+            throw new IllegalArgumentException("Ошибка: JSON пустой или null");
         }
-        return input;
+
+        input = input.replaceAll("^```json\\s*", "").replaceAll("\\s*```$", "");
+
+        int startIndex = input.indexOf("{");
+        if (startIndex == -1) {
+            throw new IllegalArgumentException("Ошибка: JSON не содержит '{'");
+        }
+
+        return input.substring(startIndex).trim();
     }
 
     /**
