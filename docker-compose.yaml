@@ -10,9 +10,9 @@ services:
     ports:
       - "9092:9092"
     environment:
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,PLAINTEXT://0.0.0.0:9092  # Указываем два слушателя: INSIDE и PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://doctorai-kafka-1:9092  # Рекламируем PLAINTEXT для внешних клиентов
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,PLAINTEXT:PLAINTEXT  # Указываем безопасность для каждого слушателя
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://doctorai-kafka-1:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
       KAFKA_LISTENER_NAME_INSIDE: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -31,7 +31,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_chat_data:/var/lib/postgresql/data  # Уникальный volume
+      - postgres_chat_data:/var/lib/postgresql/data
 
   db-news:
     image: postgres:14
@@ -42,7 +42,7 @@ services:
       POSTGRES_PASSWORD: ellieene
       POSTGRES_DB: postgres
     ports:
-      - "5433:5432"  # Должно быть 5433:5432, а не 5433:5433
+      - "5433:5432" 
     volumes:
       - postgres_news_data:/var/lib/postgresql/data  # Уникальный volume
 
